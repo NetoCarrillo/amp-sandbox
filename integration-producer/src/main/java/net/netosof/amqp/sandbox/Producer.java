@@ -24,10 +24,10 @@ public class Producer{
 	@Autowired
 	private AmqpTemplate template;
 	
-	@Value("${jsa.rabbitmq.exchange}")
+	@Value("${sandbox.rabbitmq.exchange}")
 	private String exchange;
 	
-	@Value("${jsa.rabbitmq.routingkey}")
+	@Value("${sandbox.rabbitmq.routingkey}")
 	private String routingKey;
 	
 	@Autowired
@@ -38,7 +38,7 @@ public class Producer{
 		
 		RequestBean request = new RequestBean();
 		request.setType(RequestTypes.STORE);
-		request.setName("nombre");
+		request.setName(message);
 		request.setNumber(1234);
 		request.setEncrypted(cipher.encrypt("secreto"));
 		
