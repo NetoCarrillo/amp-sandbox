@@ -7,6 +7,9 @@ import net.netosof.amqp.sandbox.integration.common.exceptions.IntegrationCommonE
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
+import org.springframework.amqp.rabbit.annotation.Exchange;
+import org.springframework.amqp.rabbit.annotation.Queue;
+import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,7 +28,10 @@ public class Consumer{
 	private CipherData cipher;
 	
 	@RabbitListener(
-			queues = "${jsa.rabbitmq.queue}")
+			bindings = @QueueBinding(
+					value = @Queue("${sandbox.rabbitmq.queue}"),
+					exchange = @Exchange("${sandbox.rabbitmq.exchange}"),
+					key = "${sandbox.rabbitmq.routingkey}"))
 	public ResponseBean consume(RequestBean request){
 		LOGGER.info("Message recieved: {}", request);
 		
@@ -38,10 +44,12 @@ public class Consumer{
 			response.setResponse("Hello " + request.getName());
 			response.setSerial(request.getNumber() + 5L);
 			response.setEncrypted(cipher.encrypt(decrypted));
+			
 		}catch(IntegrationCommonException ex){
 			throw new AmqpRejectAndDontRequeueException(ex);
 		}
 		
+		LOGGER.info("Mandando respuesta");
 		return response;
 	}
 }

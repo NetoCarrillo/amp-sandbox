@@ -9,6 +9,10 @@
 	<artifactId>integration-common</artifactId>
 	<packaging>jar</packaging>
     <dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-logging</artifactId>
+		</dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
