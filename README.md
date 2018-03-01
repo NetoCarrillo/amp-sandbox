@@ -1,1 +1,1 @@
-# card_vault
+# RabbitMQ Sandbox
